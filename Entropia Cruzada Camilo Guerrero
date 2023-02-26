@@ -1,0 +1,36 @@
+# Entropía Cruzada
+
+import numpy as np
+
+m=6                                                              # Número de elementos a sumar
+Y= np.array(np.random.randint(0,2,m))            # Arreglo de clases aleatorias [ 0 1]
+P=np.array(np.random.rand(m,1))                   # Arreglo de Probabilidades 
+
+#Y=[1,1,0]
+#P=[0.8,0.7,0.1] 
+
+
+def EC(Y, P):    
+    """
+    Esta función retorna la entropia cruzada de un arreglo de etiquetas y probabilidades 
+    del mismo tamaño
+    """
+    Y = np.float_(Y)
+    P = np.float_(P)
+    return -np.sum(Y * np.log(P) + (1 - Y) * np.log(1 - P))
+
+EC1=EC(Y,P)
+
+
+#Visualización de resultados
+print("ETIQUETAS:  ")
+print("")
+print(Y)
+print("")
+print("PROBABILIDADES " )
+print("")
+print(np.round(P,2))
+print("")
+print("ENTROPIA CRUZADA:  %.2f" %EC1 )
+
+
