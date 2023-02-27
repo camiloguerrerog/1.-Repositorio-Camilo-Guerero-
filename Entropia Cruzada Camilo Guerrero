@@ -6,9 +6,6 @@ m=6                                                              # Número de el
 Y= np.array(np.random.randint(0,2,m))            # Arreglo de clases aleatorias [ 0 1]
 P=np.array(np.random.rand(m,1))                   # Arreglo de Probabilidades 
 
-#Y=[1,1,0]
-#P=[0.8,0.7,0.1] 
-
 
 def EC(Y, P):    
     """
