@@ -2,7 +2,7 @@
 
 import numpy as np
 
-m=6                                                              # Número de elementos a sumar
+m=6                                              # Número de elementos a sumar
 Y= np.array(np.random.randint(0,2,m))            # Arreglo de clases aleatorias [ 0 1]
 P=np.array(np.random.rand(m,1))                   # Arreglo de Probabilidades 
 
