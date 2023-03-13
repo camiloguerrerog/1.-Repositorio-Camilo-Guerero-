@@ -1,3 +1,4 @@
+""""
 Taller Gradiente Descendiente.
 Implemente las siguientes funciones para desarrollar el algoritmo del gradiente descendente:
 
@@ -8,6 +9,9 @@ peso_updt: la funcion que actualiza los paramentros con un paso del gradiente de
 El objetivo del taller es encontrar la linea optima de clasificacion de los datos.
 
 -Despues de implementar las funciones del grandiente descendente, corra la funcion de entrenamiento. Esto hace que se grafiquen las lineas generadas en cada paso del algortimo del gradiente. Tambien se grafica la funcion error y podra observar como esta disminuye a medida que las epocas se incrementan.
+
+"""
+
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
@@ -25,8 +29,10 @@ def display(m, b, color='#674D70',linestyle='-.'):
     plt.ylim(-0.05,1.05)
     x = np.arange(-10, 10, 0.1)
     plt.plot(x, m*x+b, color)
-    Leyendo y graficando los datos.
-    data = pd.read_csv('data.csv', header=None)
+
+#Leyendo y graficando los datos.
+
+data = pd.read_csv('data.csv', header=None)
 X = np.array(data[[0,1]])
 y = np.array(data[2])
 plot_points(X,y)
@@ -36,6 +42,7 @@ plt.ylabel("X2", size = 14)
 plt.grid()
 plt.show()
 
+""""
 Funciones basicas a implementar
 Implemente las siguientes funciones.
 
@@ -52,6 +59,8 @@ Funcion para actualizar los pesos
 𝑤𝑖⟶𝑤𝑖+𝛼(𝑦−𝑦̂ )𝑥𝑖
  
 𝑏⟶𝑏+𝛼(𝑦−𝑦̂ )
+
+"""
 
 # Activation (sigmoid) function
 def sigmoid(x):
@@ -73,8 +82,8 @@ def update_pesos(x, y, pesos, bias, learnrate):
     return pesos, bias
     
     
-Funcion de entrenamiento
-Esta funcion hace una interacion del algoritmo del gradiente descendente en todos los datos, para un numero determinado de epocas y algunas lineas limite a medida que avanza el algoritmo.
+#Funcion de entrenamiento
+#Esta funcion hace una interacion del algoritmo del gradiente descendente en todos los datos, para un numero determinado de epocas y algunas lineas limite a medida que avanza el algoritmo.
 
 np.random.seed(44)
 
@@ -129,12 +138,12 @@ def train(features, targets, epochs, learnrate, graph_lines=False):
     plt.plot(errors)
     plt.show()
     
-    Entrenamiento del algoritmo
-Cuando corremos la funcion, se obtiene lo siguiente:
+#Entrenamiento del algoritmo
+#Cuando corremos la funcion, se obtiene lo siguiente:
 
-10 actualizaciones con perdidas del entrenamiento actual y precision.
-Un plot de los datos y las lineas de clasficacion que se obtienen. La final queda en negro. Entre mas epocas, las lineas se ajustan cada vez mejor =
-Un plot de la funcion error. Note que a medida que avanza las epocas, esta disminuye.
+#10 actualizaciones con perdidas del entrenamiento actual y precision.
+#Un plot de los datos y las lineas de clasficacion que se obtienen. La final queda en negro. Entre mas epocas, las lineas se ajustan cada vez mejor =
+#Un plot de la funcion error. Note que a medida que avanza las epocas, esta disminuye.
 
 train(X, y, epochs, learnrate, True)
 
