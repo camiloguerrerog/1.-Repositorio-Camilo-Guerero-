@@ -1,0 +1,142 @@
+Taller Gradiente Descendiente.
+Implemente las siguientes funciones para desarrollar el algoritmo del gradiente descendente:
+
+sigmoide: funcion sigmoide como funcion de activacion.
+prediccion: la formula para la preduccion.
+error: la formula para el error en un punto.
+peso_updt: la funcion que actualiza los paramentros con un paso del gradiente descendente.
+El objetivo del taller es encontrar la linea optima de clasificacion de los datos.
+
+-Despues de implementar las funciones del grandiente descendente, corra la funcion de entrenamiento. Esto hace que se grafiquen las lineas generadas en cada paso del algortimo del gradiente. Tambien se grafica la funcion error y podra observar como esta disminuye a medida que las epocas se incrementan.
+import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
+
+#funciones para graficar y dibujar lineas.
+
+def plot_points(X, y):
+    admitted = X[np.argwhere(y==1)]
+    rejected = X[np.argwhere(y==0)]
+    plt.scatter([s[0][0] for s in rejected], [s[0][1] for s in rejected], s = 25, color = 'blue', edgecolor = 'k')
+    plt.scatter([s[0][0] for s in admitted], [s[0][1] for s in admitted], s = 25, color = 'red', edgecolor = 'k')
+
+def display(m, b, color='#674D70',linestyle='-.'):
+    plt.xlim(-0.05,1.05)
+    plt.ylim(-0.05,1.05)
+    x = np.arange(-10, 10, 0.1)
+    plt.plot(x, m*x+b, color)
+    Leyendo y graficando los datos.
+    data = pd.read_csv('data.csv', header=None)
+X = np.array(data[[0,1]])
+y = np.array(data[2])
+plot_points(X,y)
+plt.title('DATOS INICIALES', size=14)
+plt.xlabel("X1", size = 14)
+plt.ylabel("X2", size = 14)
+plt.grid()
+plt.show()
+
+Funciones basicas a implementar
+Implemente las siguientes funciones.
+
+Funcion de activacion sigmoide
+𝜎(𝑥)=11+𝑒−𝑥
+ 
+Prediccion
+𝑦̂ =𝜎(𝑤1𝑥1+𝑤2𝑥2+𝑏)
+ 
+Funcion error
+𝐸𝑟𝑟𝑜𝑟(𝑦,𝑦̂ )=−𝑦log(𝑦̂ )−(1−𝑦)log(1−𝑦̂ )
+ 
+Funcion para actualizar los pesos
+𝑤𝑖⟶𝑤𝑖+𝛼(𝑦−𝑦̂ )𝑥𝑖
+ 
+𝑏⟶𝑏+𝛼(𝑦−𝑦̂ )
+
+# Activation (sigmoid) function
+def sigmoid(x):
+    return 1/(1+np.exp(-x))
+
+# Output (prediction) formula
+def prediccion(features, pesos, bias):
+    return sigmoid(np.dot(features, pesos) + bias)  # y gorrito
+
+# Error (log-loss) formula
+def error_formula(y, output):
+    return np.dot(-y, np.log(output)) - np.dot((1-y), np.log(1-output))
+
+# Gradient descent step
+def update_pesos(x, y, pesos, bias, learnrate):
+    output = prediccion(x, pesos, bias)
+    pesos += np.dot(learnrate, np.dot((y - output),x))
+    bias += learnrate*(y- output)
+    return pesos, bias
+    
+    
+Funcion de entrenamiento
+Esta funcion hace una interacion del algoritmo del gradiente descendente en todos los datos, para un numero determinado de epocas y algunas lineas limite a medida que avanza el algoritmo.
+
+np.random.seed(44)
+
+epochs = 50
+learnrate = 0.01
+
+def train(features, targets, epochs, learnrate, graph_lines=False):
+    
+    errors = []
+    n_records, n_features = features.shape
+    last_loss = None
+    pesos = np.random.normal(scale=1 / n_features**.5, size=n_features)
+    bias = 0
+    for e in range(epochs):
+        del_w = np.zeros(pesos.shape)
+        for x, y in zip(features, targets):
+            output = prediccion(x, pesos, bias)
+            error = error_formula(y, output)
+            pesos, bias = update_pesos(x, y, pesos, bias, learnrate)
+        
+        # Printing out the log-loss error on the training set
+        out = prediccion(features, pesos, bias)
+        loss = np.mean(error_formula(targets, out))
+        errors.append(loss)
+        if e % (epochs / 10) == 0:
+            print("\n========== Epoca", e,"==========")
+            if last_loss and last_loss < loss:
+                print("Train loss: ", loss, "  WARNING - Loss Increasing")
+            else:
+                print("Train loss: ", loss)
+            last_loss = loss
+            predictions = out > 0.5
+            accuracy = np.mean(predictions == targets)
+            print("Precision: ", accuracy)
+        if graph_lines and e % (epochs / 100) == 0:
+            display(-pesos[0]/pesos[1], -bias/pesos[1])
+            
+
+    # Plotting the solution boundary
+    plt.title("Solution boundary")
+    display(-pesos[0]/pesos[1], -bias/pesos[1], 'black')
+
+    # Plotting the data
+    plot_points(features, targets)
+    plt.show()
+
+    # Plotting the error
+    plt.title("Error Plot")
+    plt.xlabel('Número de Épocas')
+    plt.ylabel('Error')
+    plt.grid()
+    plt.plot(errors)
+    plt.show()
+    
+    Entrenamiento del algoritmo
+Cuando corremos la funcion, se obtiene lo siguiente:
+
+10 actualizaciones con perdidas del entrenamiento actual y precision.
+Un plot de los datos y las lineas de clasficacion que se obtienen. La final queda en negro. Entre mas epocas, las lineas se ajustan cada vez mejor =
+Un plot de la funcion error. Note que a medida que avanza las epocas, esta disminuye.
+
+train(X, y, epochs, learnrate, True)
+
+
+    
